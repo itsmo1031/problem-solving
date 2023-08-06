@@ -8,15 +8,15 @@ public class Main {
         private final int LEFT = 2;
         private final int UP = 3;
 
-        final int[][] DIR = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
-        int[][] direction;
-        int currentDirection;
-        int directionCnt;
-        int x;
-        int y;
+        private final int[][] DIR = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+        private int[][] direction;
+        private int x;
+        private int y;
+        private int currentDirection;
+        private int rotateCnt;
 
         public CCTV(int num, int x, int y) {
-            this.directionCnt = setDirection(num);
+            this.rotateCnt = setDirection(num);
             this.currentDirection = 0;
             this.x = x;
             this.y = y;
@@ -54,15 +54,15 @@ public class Main {
         }
 
         public void rotate() {
-            this.currentDirection = (this.currentDirection + 1) % directionCnt;
+            this.currentDirection = (this.currentDirection + 1) % rotateCnt;
         }
 
         public void record(int[][] map) {
             for (int di : direction[currentDirection]) {
-                int cnt = 1;
+                int len = 1;
                 while (true) {
-                    int nx = this.x + DIR[di][0] * cnt;
-                    int ny = this.y + DIR[di][1] * cnt;
+                    int nx = this.x + DIR[di][0] * len;
+                    int ny = this.y + DIR[di][1] * len;
 
                     if (nx < 0 || nx >= N || ny < 0 || ny >= M || map[nx][ny] == 6)
                         break;
@@ -71,31 +71,33 @@ public class Main {
                         map[nx][ny] = -1;
                     }
 
-                    cnt += 1;
+                    len += 1;
                 }
             }
+        }
+
+        public int getRotateCnt() {
+            return this.rotateCnt;
         }
     }
 
     static int N;
     static int M;
     static int[][] map;
-    static int answer = Integer.MAX_VALUE;
+    static int minBlindSpot = Integer.MAX_VALUE;
     static List<CCTV> CCTVList;
 
-    static void startRecord(int count, int start, int[][] tempMap) {
+    static void startRecord(int count, int[][] tempMap) {
         if (count == CCTVList.size()) {
-            answer = Math.min(answer, calcBlindSpot(tempMap));
+            minBlindSpot = Math.min(minBlindSpot, calcBlindSpot(tempMap));
             return;
         }
-        for (int idx = start; idx < CCTVList.size(); idx++) {
-            CCTV current = CCTVList.get(idx);
-            for (int dir = 0; dir < current.directionCnt; dir++) {
-                int[][] newMap = copyMap(tempMap);
-                current.record(newMap);
-                startRecord(count + 1, idx + 1, newMap);
-                current.rotate();
-            }
+        CCTV current = CCTVList.get(count);
+        for (int dir = 0; dir < current.getRotateCnt(); dir++) {
+            int[][] newMap = copyMap(tempMap);
+            current.record(newMap);
+            startRecord(count + 1, newMap);
+            current.rotate();
         }
     }
 
@@ -142,8 +144,8 @@ public class Main {
             }
         }
 
-        startRecord(0, 0, map);
+        startRecord(0, map);
 
-        System.out.println(answer);
+        System.out.println(minBlindSpot);
     }
 }
