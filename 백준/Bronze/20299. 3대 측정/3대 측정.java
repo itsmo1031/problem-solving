@@ -12,6 +12,7 @@ public class Main {
         int teamCnt = Integer.parseInt(st.nextToken());
         int teamSum = Integer.parseInt(st.nextToken());
         int minimum = Integer.parseInt(st.nextToken());
+
         List<Integer> team = new ArrayList<>();
         int total = 0;
         for (int idx = 0; idx < teamCnt; idx++) {
@@ -19,8 +20,9 @@ public class Main {
             team.clear();
             for (int score = 0; score < 3; score++) {
                 int now = Integer.parseInt(st.nextToken());
-                if (now >= minimum)
-                    team.add(now);
+                if (now < minimum)
+                    break;
+                team.add(now);
             }
             if (team.size() == 3 && teamSum <= team.stream().reduce(0, Integer::sum)) {
                 for (int score : team) {
