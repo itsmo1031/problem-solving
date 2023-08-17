@@ -5,7 +5,6 @@ import java.util.StringTokenizer;
 public class Main {
     static int boardRow, boardCol;
     static int[][] board;
-    static boolean[][] visited;
     static boolean[] check;
     static int result = 0;
     static final int[][] DIR = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
@@ -18,7 +17,6 @@ public class Main {
         boardCol = Integer.parseInt(st.nextToken());
 
         board = new int[boardRow][boardCol];
-        visited = new boolean[boardRow][boardCol];
         check = new boolean[26];
 
         for (int row = 0; row < boardRow; row++) {
@@ -27,14 +25,16 @@ public class Main {
                 board[row][col] = line.charAt(col) - 'A';
             }
         }
-        place(0, 0);
+        place(0, 0, 1);
         System.out.println(result);
 
     }
 
-    static void place(int x, int y) {
-        visited[x][y] = true;
+    static void place(int x, int y, int cnt) {
         check[board[x][y]] = true;
+
+        if (cnt > result)
+            result = cnt;
 
         for (int[] dir : DIR) {
             int nx = x + dir[0];
@@ -43,19 +43,10 @@ public class Main {
             if (nx < 0 || nx >= boardRow || ny < 0 || ny >= boardCol)
                 continue;
 
-            if (!visited[nx][ny] && !check[board[nx][ny]]) {
-                place(nx, ny);
-                visited[nx][ny] = false;
+            if (!check[board[nx][ny]]) {
+                place(nx, ny, cnt + 1);
                 check[board[nx][ny]] = false;
             }
         }
-
-        int cnt = 0;
-        for (boolean ch : check) {
-            if (ch)
-                cnt += 1;
-        }
-        result = Math.max(result, cnt);
-
     }
 }
