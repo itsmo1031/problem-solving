@@ -27,19 +27,32 @@ public class Main {
         }
 
         void move() {
-            for (int time = 0; time < speed; time++) {
-                int nx = x + DIR[dir][0];
-                int ny = y + DIR[dir][1];
 
-                if (nx < 0 || nx >= seaRow || ny < 0 || ny >= seaCol) {
+            int nx = x + DIR[dir][0] * speed;
+            int ny = y + DIR[dir][1] * speed;
+
+            while (nx < 0 || nx >= seaRow || ny < 0 || ny >= seaCol) {
+                if (nx < 0) { // x가 0보다 작은 경우 위쪽으로 이동한 것
                     dir = flip();
-                    nx = x + DIR[dir][0];
-                    ny = y + DIR[dir][1];
+                    nx = -nx;
+                }
+                if (nx >= seaRow) {
+                    dir = flip();
+                    nx = (seaRow - 1) - (nx - (seaRow - 1));
                 }
 
-                x = nx;
-                y = ny;
+                if (ny < 0) {
+                    dir = flip();
+                    ny = -ny;
+                }
+                if (ny >= seaCol) {
+                    dir = flip();
+                    ny = (seaCol - 1) - (ny - (seaCol - 1));
+                }
             }
+
+            x = nx;
+            y = ny;
 
             sea[x][y].offer(this);
         }
