@@ -42,11 +42,14 @@ public class Main {
     }
 
     static boolean isPossible(int[] target) {
+        if (!canWin(target))
+            return false;
+
         boolean[][] visited = new boolean[LENGTH][LENGTH];
         visited[target[0] / LENGTH][target[0] % LENGTH] = true;
         Queue<Integer> q = new ArrayDeque<>();
         q.offer(target[0]);
-        int yGroupCnt = 0, count = 0;
+        int count = 0;
 
         while (!q.isEmpty()) {
             int now = q.poll();
@@ -54,11 +57,6 @@ public class Main {
             int nowY = now % LENGTH;
 
             count += 1;
-            if (classroom[nowX][nowY] == 'Y')
-                yGroupCnt += 1;
-
-            if (yGroupCnt > 3)
-                return false;
 
             for (int[] dir : DIR) {
                 int nx = nowX + dir[0];
@@ -78,6 +76,18 @@ public class Main {
         }
 
         return count == 7 ? true : false;
+    }
+
+    private static boolean canWin(int[] target) {
+        int yCnt = 0;
+        for (int now : target) {
+            int nowX = now / LENGTH;
+            int nowY = now % LENGTH;
+            if (classroom[nowX][nowY] == 'Y')
+                if (++yCnt > 3)
+                    return false;
+        }
+        return true;
     }
 
     public static void main(String[] args) throws Exception {
