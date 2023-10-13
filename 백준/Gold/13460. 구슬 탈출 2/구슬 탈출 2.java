@@ -9,7 +9,6 @@ public class Main {
     static int mapRow, mapCol;
     static char[][] map;
     static Pos hole;
-    static Marble[] marbleList;
     static Marble red, blue;
     static int answer = -1;
 
@@ -22,7 +21,6 @@ public class Main {
         public boolean isHole() {
             return hole.r == this.r && hole.c == this.c;
         }
-
     }
 
     static class Pos {
@@ -31,11 +29,6 @@ public class Main {
         public Pos(int r, int c) {
             this.r = r;
             this.c = c;
-        }
-
-        @Override
-        public String toString() {
-            return "Pos [r=" + r + ", c=" + c + "]";
         }
 
         public boolean isSamePos(Pos pos) {
@@ -87,8 +80,9 @@ public class Main {
             return;
         }
 
-        if (red.isSamePos(blue) || blue.isHole())
+        if (blue.isHole())
             return;
+
         if (red.isHole()) {
             answer = time;
             return;
