@@ -81,10 +81,6 @@ public class Main {
                 int nr = now.r + dir[0];
                 int nc = now.c + dir[1];
 
-                if (isNotValid(nr, nc)) {
-                    continue;
-                }
-
                 if (map[nr][nc] == ICE) {
                     Pos np = slide(nr, nc, dir);
                     nr = np.r;
@@ -106,7 +102,7 @@ public class Main {
         while (true) {
             nr += dir[0];
             nc += dir[1];
-            if (isNotValid(nr, nc) || map[nr][nc] == WALL) {
+            if (map[nr][nc] == WALL) {
                 nr -= dir[0];
                 nc -= dir[1];
                 break;
@@ -117,9 +113,5 @@ public class Main {
         }
 
         return new Pos(nr, nc);
-    }
-
-    static boolean isNotValid(int nr, int nc) {
-        return (nr <= 0 || nr > mapRow || nc <= 0 || nc > mapCol);
     }
 }
