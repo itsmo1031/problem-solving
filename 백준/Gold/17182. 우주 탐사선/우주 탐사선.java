@@ -47,6 +47,9 @@ public class Main {
             return;
         }
 
+        if (answer < dist)
+            return;
+
         for (int idx = 0; idx < planetCnt; idx++) {
             if (visited[idx] || current == idx)
                 continue;
