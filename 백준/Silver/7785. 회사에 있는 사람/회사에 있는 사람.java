@@ -25,8 +25,12 @@ public class Main {
             }
         }
 
+        StringBuilder sb = new StringBuilder();
+
         set.stream()
                 .sorted(Comparator.reverseOrder())
-                .forEach(System.out::println);
+                .forEach(name -> sb.append(name).append("\n"));
+
+        System.out.print(sb);
     }
 }
