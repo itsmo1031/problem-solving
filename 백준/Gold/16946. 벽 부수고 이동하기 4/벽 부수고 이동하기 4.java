@@ -67,7 +67,7 @@ public class Main {
         for (int row = 0; row < mapRow; row++) {
             for (int col = 0; col < mapCol; col++) {
                 if (map[row][col] == WALL) {
-                    map[row][col] = addArea(new Pos(row, col));
+                    map[row][col] = (map[row][col] + addArea(new Pos(row, col))) % 10;
                 }
             }
         }
@@ -102,7 +102,7 @@ public class Main {
             visited.add(memo[nr][nc]);
         }
 
-        return (visited.stream().mapToInt(room -> room.count).sum() + 1) % 10;
+        return visited.stream().mapToInt(room -> room.count).sum() % 10;
     }
 
     static void countRoom(Pos start, int roomNo) {
