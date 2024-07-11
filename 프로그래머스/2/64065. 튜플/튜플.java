@@ -8,21 +8,19 @@ class Solution {
         
         Arrays.sort(arr, (s1, s2) -> s1.length() - s2.length());
         
-        List<Integer> list = new ArrayList<>();
+        int[] answer = new int[arr[arr.length - 1].split(",").length];
+        Set<Integer> set = new HashSet<>();
+        int idx = 0;
         
         for (String str : arr) {
             String[] splitted = str.split(",");
             for (String elem : splitted) {
                 int e = Integer.parseInt(elem);
-                if (!list.contains(e)) {
-                    list.add(e);
+                if (set.add(e)) {
+                    answer[idx++] = e;
                 }
             }
         }
-        
-        int[] answer = list.stream()
-            .mapToInt(Integer::intValue)
-            .toArray();
         
         return answer;
     }
