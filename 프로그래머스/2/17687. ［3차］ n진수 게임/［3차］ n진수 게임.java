@@ -7,7 +7,7 @@ class Solution {
         int number = 0;
         
         while (sb.length() < maxLength) {
-            sb.append(Integer.toString(number++, n).toUpperCase());
+            sb.append(Integer.toString(number++, n));
         }
         
         StringBuilder answer = new StringBuilder();
@@ -16,6 +16,6 @@ class Solution {
             answer.append(sb.charAt(i));
         }
         
-        return answer.toString();
+        return answer.toString().toUpperCase();
     }
 }
