@@ -14,15 +14,17 @@ class Solution {
         Arrays.fill(check, -1);
         
         for (int i = 0; i < a.length; i++) {
+            int cnt = map.computeIfAbsent(a[i], k -> 0);
+            
             if (i > 0 && a[i - 1] != a[i] && check[i - 1] != a[i]) {
                 check[i - 1] = a[i];
-                map.put(a[i], map.getOrDefault(a[i], 0) + 1);
+                cnt = map.compute(a[i], (k, v) -> v + 1);
             } else if (i < a.length - 1 && a[i] != a[i + 1] && check[i + 1] != a[i]) {
                 check[i + 1] = a[i];
-                map.put(a[i], map.getOrDefault(a[i], 0) + 1);
+                cnt = map.compute(a[i], (k, v) -> v + 1);
             }
             
-            answer = Math.max(answer, map.getOrDefault(a[i], 0) * 2);
+            answer = Math.max(answer, cnt * 2);
         }
         
         return answer;
