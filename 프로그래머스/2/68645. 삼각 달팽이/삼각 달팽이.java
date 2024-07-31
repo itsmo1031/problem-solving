@@ -8,7 +8,6 @@ class Solution {
     static int[] makeSnail(int n) {
         int[][] board = new int[n][n];
         int num = 1;
-        int[] dir = DIR[0];
         int dirIdx = 0;
         int stack = 0;
         
