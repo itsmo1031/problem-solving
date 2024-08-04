@@ -1,0 +1,31 @@
+-- 코드를 작성해주세요
+WITH
+SKILLS AS (
+    SELECT
+        SUM(IF(CATEGORY = 'Front End', CODE, 0)) AS FRONT_END,
+        MAX(IF(NAME = 'C#', CODE, 0)) AS C_SHARP,
+        MAX(IF(NAME = 'Python', CODE, 0)) AS PYTHON
+    FROM SKILLCODES
+),
+GRADES AS (
+    SELECT
+    (
+        CASE
+        WHEN D.SKILL_CODE & S.FRONT_END != 0 AND D.SKILL_CODE & S.PYTHON != 0
+        THEN 'A'
+        WHEN D.SKILL_CODE & S.C_SHARP != 0
+        THEN 'B'
+        WHEN D.SKILL_CODE & S.FRONT_END != 0
+        THEN 'C'
+        ELSE 'D'
+        END
+    ) AS GRADE, ID
+    FROM DEVELOPERS D
+    JOIN SKILLS S
+)
+SELECT GRADE, ID, EMAIL
+FROM DEVELOPERS
+INNER JOIN GRADES
+USING (ID)
+WHERE GRADE != 'D'
+ORDER BY GRADE ASC, ID ASC;
