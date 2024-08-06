@@ -27,21 +27,12 @@ class Solution {
         init(n, paths, gates, summits);
         Arrays.sort(summits);
         
-        int[] memo = new int[n + 1];
-        Arrays.fill(memo, INF);
-        
-        for (int gate : gates) {
-            int[] result = dijkstra(gate);
-            
-            for (int i = 0; i < summits.length; i++) {
-                memo[i] = Math.min(memo[i], result[summits[i]]);
-            }
-        }
-        
+        int[] result = dijkstra(gates);
+
         for (int i = 0; i < summits.length; i++) {
-            if (memo[i] < answer[1]) {
+            if (result[summits[i]] < answer[1]) {
                 answer[0] = summits[i];
-                answer[1] = memo[i];
+                answer[1] = result[summits[i]];
             }
         }
         
@@ -76,24 +67,26 @@ class Solution {
         }
     }
     
-    static int[] dijkstra(int start) {
+    static int[] dijkstra(int[] starts) {
         Queue<Edge> q = new PriorityQueue<>();
-        
-        int[] dist = new int[edgeCnt + 1];
-        Arrays.fill(dist, INF);
-        dist[start] = 0;
         
         int[] intensity = new int[edgeCnt + 1];
         Arrays.fill(intensity, INF);
-        intensity[start] = 0;
         
-        q.offer(new Edge(start, 0));
+        for(int start: starts) {
+            intensity[start] = 0;
+            q.offer(new Edge(start, 0));
+        }
         
         while(!q.isEmpty()) {
             Edge now = q.poll();
             
             if (summitSet.contains(now.num)) {
-                break;
+                continue;
+            }
+            
+            if (now.weight > intensity[now.num]) {
+                continue;
             }
             
             for (Edge next : graph[now.num]) {
@@ -101,10 +94,10 @@ class Solution {
                     continue;
                 }
                 
-                if (next.weight < dist[next.num]) {
-                    dist[next.num] = next.weight;
-                    q.offer(new Edge(next.num, next.weight));
-                    intensity[next.num] = Math.max(intensity[now.num], next.weight);
+                int nw = Math.max(intensity[now.num], next.weight);
+                if (nw < intensity[next.num]) {
+                    q.offer(new Edge(next.num, nw));
+                    intensity[next.num] = nw;
                 }
             }
         }
