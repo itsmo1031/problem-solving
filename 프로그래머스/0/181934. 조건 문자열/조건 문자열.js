@@ -1,16 +1,11 @@
+const operations = {
+    '>=' : (n, m) => n >= m,
+    '<=' : (n, m) => n <= m,
+    '>!' : (n, m) => n > m,
+    '<!' : (n, m) => n < m,
+}
+
 function solution(ineq, eq, n, m) {
-    if (ineq === '<') {
-        if (eq === '=') {
-            return n <= m ? 1 : 0;
-        } else {
-            return n < m ? 1 : 0;
-        }
-    } else {
-        if (eq === '=') {
-            return n >= m ? 1 : 0;
-        } else {
-            return n > m ? 1 : 0;
-        }
-    }
-    return answer;
+    const op = operations[ineq + eq];
+    return +op(n, m);
 }
